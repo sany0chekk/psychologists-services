@@ -8,11 +8,15 @@ interface Props {
 
 export default function Button({
   children,
-  variant = "filled",
+  variant = "bordered",
   className = "",
 }: Props) {
-  const defaultStyles = "";
-  const variantStyles = variant === "filled" ? "" : "";
+  const defaultStyles =
+    "flex items-center gap-4 font-medium text-base text-dark rounded-full";
+  const variantStyles =
+    variant === "filled"
+      ? "text-light bg-green transition-colors hover:bg-darkGreen"
+      : "border border-1 border-[rgba(25, 26, 21, 0.2)] transition-opacity hover:opacity-50";
 
   return (
     <button className={`${defaultStyles} ${variantStyles} ${className}`}>
