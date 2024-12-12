@@ -3,7 +3,7 @@ import Button from "../ui/Button";
 
 export default function UserHeader() {
   return (
-    <div className="flex items-center gap-7">
+    <div className="flex items-center max-laptop:justify-center gap-7">
       <div className="flex items-center gap-4">
         <span className="w-10 h-10 bg-green rounded-md flex items-center justify-center">
           <svg className="w-6 h-6 fill-light">

@@ -15,6 +15,7 @@ export default function Modal({
 }: Props) {
   const handleClose = () => {
     closeModal();
+    document.body.style.overflow = "";
   };
 
   return (
@@ -23,9 +24,11 @@ export default function Modal({
         isOpen
           ? "visible opacity-100 pointer-events-auto"
           : "invisible opacity-0 pointer-events-none"
-      } absolute top-0 left-0 z-50 w-full h-full flex items-center justify-center px-4 bg-dark bg-opacity-60 transition-all`}
+      } fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center px-4 bg-dark bg-opacity-60 transition-all`}
     >
-      <div className={`bg-light p-16 rounded-2xl relative ${className}`}>
+      <div
+        className={`bg-light p-6 max-md:pt-16 md:p-16 rounded-2xl relative ${className}`}
+      >
         <button
           className="absolute top-5 right-5 transition-opacity hover:opacity-70"
           onClick={handleClose}

@@ -4,10 +4,10 @@ import Button from "../components/ui/Button";
 
 export default function HomePage() {
   return (
-    <section className="flex-grow flex">
-      <Container className="flex items-center justify-between w-full">
-        <div className="max-w-[595px]">
-          <h1 className="font-semibold text-[80px] leading-[0.95] mb-5">
+    <section className="pt-10 pb-20 flex-grow flex">
+      <Container className="flex flex-col laptop:flex-row items-center justify-between w-full">
+        <div className="max-w-[595px] max-laptop:mb-20">
+          <h1 className="font-semibold  text-5xl laptop:text-[80px] leading-[0.95] mb-5">
             The road to the <span className="text-green">depths</span> of the
             human soul
           </h1>
@@ -30,7 +30,7 @@ export default function HomePage() {
             className="rounded-md"
             alt="Hero image"
           />
-          <div className="p-8 rounded-2xl bg-green inline-flex items-center gap-4 absolute bottom-[10%] -left-[100px]">
+          <div className="p-4 laptop:p-8 rounded-2xl bg-green inline-flex items-center gap-4 absolute max-laptop:translate-y-1/3 bottom-0 laptop:bottom-[10%] left-1/2 max-laptop:-translate-x-1/2 laptop:-left-[100px] max-laptop:w-full max-w-[250px] md:max-w-[300px]">
             <span className="w-[54px] h-[54px] bg-light rounded-2xl flex items-center justify-center">
               <svg className="w-5 h-5 fill-green">
                 <use href="./svg/icons.svg#icon-check"></use>
@@ -43,12 +43,12 @@ export default function HomePage() {
               <p className="font-bold text-2xl text-light">15,000</p>
             </div>
           </div>
-          <span className="absolute top-1/3 -left-8 -rotate-[15deg] w-10 h-10 bg-purple rounded-xl flex items-center justify-center">
+          <span className="absolute top-1/3 laptop:-left-8 -rotate-[15deg] w-10 h-10 bg-purple rounded-xl flex items-center justify-center">
             <svg className="w-4 h-4 fill-light">
               <use href="./svg/icons.svg#icon-question"></use>
             </svg>
           </span>
-          <span className="absolute top-[15%] -right-9 rotate-[15deg] w-12 h-12 bg-yellow rounded-xl flex items-center justify-center">
+          <span className="absolute top-[15%] right-0 laptop:-right-9 rotate-[15deg] w-12 h-12 bg-yellow rounded-xl flex items-center justify-center">
             <svg className="w-7 h-7 fill-light">
               <use href="./svg/icons.svg#icon-users"></use>
             </svg>

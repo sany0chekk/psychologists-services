@@ -1,26 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "../ui/Button";
-import AuthLoginModal from "./AuthLoginModal";
-import AuthRegistrationModal from "./AuthRegistrationModal";
 
-export default function AuthHeader() {
-  const [isLoginVisible, setIsLoginVisible] = useState(false);
-  const [isRegistrationVisible, setIsRegistrationVisible] = useState(false);
+interface Props {
+  onLoginOpen: () => void;
+  onRegistrationOpen: () => void;
+}
 
-  const handleLoginOpen = () => setIsLoginVisible(true);
-  const handeLoginClose = () => setIsLoginVisible(false);
-
-  const handleRegistrationOpen = () => setIsRegistrationVisible(true);
-  const handleRegistrationClose = () => setIsRegistrationVisible(false);
-
+export default function AuthHeader({ onLoginOpen, onRegistrationOpen }: Props) {
   return (
     <>
-      <ul className="flex items-center gap-2">
+      <ul className="flex flex-col sm:flex-row max-laptop:justify-center items-center gap-2">
         <li>
           <Button
             variant="bordered"
             className="py-3.5 px-10"
-            onClick={handleLoginOpen}
+            onClick={onLoginOpen}
           >
             Log In
           </Button>
@@ -29,17 +23,12 @@ export default function AuthHeader() {
           <Button
             variant="filled"
             className="py-3.5 px-10"
-            onClick={handleRegistrationOpen}
+            onClick={onRegistrationOpen}
           >
             Registration
           </Button>
         </li>
       </ul>
-      <AuthLoginModal isOpen={isLoginVisible} closeModal={handeLoginClose} />
-      <AuthRegistrationModal
-        isOpen={isRegistrationVisible}
-        closeModal={handleRegistrationClose}
-      />
     </>
   );
 }
