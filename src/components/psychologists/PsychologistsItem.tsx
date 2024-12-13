@@ -18,7 +18,6 @@ export default function PsychologistsItem({ item }: Props) {
     price_per_hour,
     lessons_done,
     avatar_url,
-    lesson_info,
     conditions,
     experience,
   } = item;
