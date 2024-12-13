@@ -2,6 +2,8 @@ import React from "react";
 import HeaderNav from "./HeaderNav";
 import UserHeader from "../user/UserHeader";
 import AuthHeader from "../auth/AuthHeader";
+import { useSelector } from "react-redux";
+import { selectIsAuthorized } from "../../redux/user/selectors";
 
 interface Props {
   isOpen: boolean;
@@ -16,7 +18,7 @@ export default function MobileMenu({
   onLoginOpen,
   onRegistrationOpen,
 }: Props) {
-  const isAuthorized = false;
+  const isAuthorized = useSelector(selectIsAuthorized);
 
   const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) {

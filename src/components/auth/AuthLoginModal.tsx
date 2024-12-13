@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
@@ -8,6 +8,10 @@ import AuthPasswordInput from "./AuthPasswordInput";
 import ModalTitle from "../modal/ModalTitle";
 import ModalDescr from "../modal/ModalDescr";
 import Modal from "../modal/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { googleSignIn, login } from "../../redux/user/operations";
+import { selectIsAuthorized } from "../../redux/user/selectors";
 
 interface FormValues {
   email: string;
@@ -20,6 +24,8 @@ interface Props {
 }
 
 export default function AuthLoginModal({ isOpen, closeModal }: Props) {
+  const isAuthorized = useSelector(selectIsAuthorized);
+  const dispatch = useDispatch<AppDispatch>();
   const initialValues = {
     email: "",
     password: "",
@@ -36,10 +42,18 @@ export default function AuthLoginModal({ isOpen, closeModal }: Props) {
     values: FormValues,
     { resetForm }: FormikHelpers<FormValues>
   ) => {
-    console.log(values);
+    dispatch(login({ email: values.email, password: values.password }));
     closeModal();
     resetForm();
   };
+
+  const handleGoogleAuth = () => dispatch(googleSignIn());
+
+  useEffect(() => {
+    if (isAuthorized) {
+      closeModal();
+    }
+  }, [isAuthorized, closeModal]);
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal} className="max-w-[566px]">
@@ -69,10 +83,22 @@ export default function AuthLoginModal({ isOpen, closeModal }: Props) {
             <Button
               type="submit"
               variant="filled"
-              className="p-4 w-full flex items-center justify-center"
+              className="p-4 w-full flex items-center justify-center mb-4"
             >
               Log In
             </Button>
+            <button
+              onClick={handleGoogleAuth}
+              className="w-full p-4 flex items-center justify-center gap-2 rounded-full border-2 transition-colors hover:bg-bg"
+            >
+              <img
+                className="w-6 h-6"
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                loading="lazy"
+                alt="google logo"
+              />
+              <span className="text-dark">Login with Google</span>
+            </button>
           </Form>
         </Formik>
       </div>

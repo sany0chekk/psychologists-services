@@ -1,12 +1,14 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { selectIsAuthorized } from "../../redux/user/selectors";
 
 interface Props {
   className?: string;
 }
 
 export default function HeaderNav({ className }: Props) {
-  const isAuthorized = false;
+  const isAuthorized = useSelector(selectIsAuthorized);
   const navLinkStyles = ({ isActive }: { isActive: boolean }) =>
     `font-bold laptop:font-normal text-2xl max-laptop:uppercase laptop:text-base text-dark relative transition-opacity hover:opacity-70 ${
       isActive

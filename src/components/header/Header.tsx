@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Container from "../layouts/Container";
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import { selectIsAuthorized } from "../../redux/user/selectors";
+import { useSelector } from "react-redux";
+import { selectIsAuthorized } from "../../redux/user/selectors";
 import AuthHeader from "../auth/AuthHeader";
 import UserHeader from "../user/UserHeader";
 import HeaderNav from "./HeaderNav";
@@ -11,8 +11,7 @@ import AuthLoginModal from "../auth/AuthLoginModal";
 import AuthRegistrationModal from "../auth/AuthRegistrationModal";
 
 export default function Header() {
-  // const isAuthorized = useSelector(selectIsAuthorized);
-  const isAuthorized = false;
+  const isAuthorized = useSelector(selectIsAuthorized);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginVisible, setIsLoginVisible] = useState(false);
   const [isRegistrationVisible, setIsRegistrationVisible] = useState(false);
