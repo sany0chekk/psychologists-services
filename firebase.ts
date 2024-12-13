@@ -7,7 +7,6 @@ import {
   onAuthStateChanged,
   User,
 } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics";
 
 export const checkAuth = (): Promise<User> => {
   return new Promise((resolve, reject) => {
@@ -32,8 +31,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
 export {
