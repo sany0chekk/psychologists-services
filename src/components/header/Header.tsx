@@ -19,11 +19,21 @@ export default function Header() {
 
   const handleLoginOpen = () => {
     setIsLoginVisible(true);
+    document.body.style.overflow = "hidden";
   };
-  const handeLoginClose = () => setIsLoginVisible(false);
+  const handeLoginClose = () => {
+    setIsLoginVisible(false);
+    document.body.style.overflow = "";
+  };
 
-  const handleRegistrationOpen = () => setIsRegistrationVisible(true);
-  const handleRegistrationClose = () => setIsRegistrationVisible(false);
+  const handleRegistrationOpen = () => {
+    setIsRegistrationVisible(true);
+    document.body.style.overflow = "hidden";
+  };
+  const handleRegistrationClose = () => {
+    setIsRegistrationVisible(false);
+    document.body.style.overflow = "";
+  };
 
   const handleMenuOpen = () => {
     setIsMenuOpen(true);

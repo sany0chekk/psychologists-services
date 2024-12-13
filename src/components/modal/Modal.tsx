@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -13,13 +13,35 @@ export default function Modal({
   isOpen,
   closeModal,
 }: Props) {
-  const handleClose = () => {
-    closeModal();
-    document.body.style.overflow = "";
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeModal();
+        document.body.style.overflow = "";
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, closeModal]);
+
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      closeModal();
+      document.body.style.overflow = "";
+    }
   };
 
   return (
     <div
+      onClick={handleBackdropClick}
       className={`${
         isOpen
           ? "visible opacity-100 pointer-events-auto"
@@ -31,7 +53,7 @@ export default function Modal({
       >
         <button
           className="absolute top-5 right-5 transition-opacity hover:opacity-70"
-          onClick={handleClose}
+          onClick={closeModal}
         >
           <svg className="w-8 h-8 stroke-dark">
             <use href="./svg/icons.svg#icon-close"></use>

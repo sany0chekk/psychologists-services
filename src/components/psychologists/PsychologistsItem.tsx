@@ -4,9 +4,10 @@ import Button from "../ui/Button";
 
 interface Props {
   item: Psychologist;
+  onOpenModal: (psychologist: Psychologist) => void;
 }
 
-export default function PsychologistsItem({ item }: Props) {
+export default function PsychologistsItem({ item, onOpenModal }: Props) {
   const [isFullVisible, setIsFullVisible] = useState(false);
   const {
     name,
@@ -21,6 +22,10 @@ export default function PsychologistsItem({ item }: Props) {
     conditions,
     experience,
   } = item;
+
+  const handleOpenModal = (psychologist: Psychologist) => {
+    onOpenModal(psychologist);
+  };
 
   const handleToggleCard = () => setIsFullVisible(!isFullVisible);
 
@@ -88,7 +93,7 @@ export default function PsychologistsItem({ item }: Props) {
           {conditions.length > 0 &&
             conditions.map((condition) => {
               return (
-                <li className="bg-bg py-2 px-4 rounded-full">
+                <li key={condition} className="bg-bg py-2 px-4 rounded-full">
                   <p className="text-dark">{condition}</p>
                 </li>
               );
@@ -106,36 +111,38 @@ export default function PsychologistsItem({ item }: Props) {
         >
           {reviews.length > 0 && (
             <ul className="grid gap-6 mb-10">
-              {reviews.map(
-                ({ reviewer_name, reviewer_rating, comment }, index) => {
-                  return (
-                    <li key={index}>
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="w-11 h-11 rounded-full bg-lightGreen flex items-center justify-center font-medium text-xl text-green">
-                          {reviewer_name[0]}
-                        </span>
-                        <div>
-                          <p className="font-medium text-base text-dark">
-                            {reviewer_name}
-                          </p>
-                          <p className="flex items-center font-medium text-sm gap-1">
-                            <svg className="w-4 h-4 fill-yellow">
-                              <use href="./svg/icons.svg#icon-star"></use>
-                            </svg>
-                            {reviewer_rating}
-                          </p>
-                        </div>
+              {reviews.map(({ reviewer_name, reviewer_rating, comment }) => {
+                return (
+                  <li key={reviewer_name}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="w-11 h-11 rounded-full bg-lightGreen flex items-center justify-center font-medium text-xl text-green">
+                        {reviewer_name[0]}
+                      </span>
+                      <div>
+                        <p className="font-medium text-base text-dark">
+                          {reviewer_name}
+                        </p>
+                        <p className="flex items-center font-medium text-sm gap-1">
+                          <svg className="w-4 h-4 fill-yellow">
+                            <use href="./svg/icons.svg#icon-star"></use>
+                          </svg>
+                          {reviewer_rating}
+                        </p>
                       </div>
-                      <p className="font-normal text-base text-dark opacity-50">
-                        {comment}
-                      </p>
-                    </li>
-                  );
-                }
-              )}
+                    </div>
+                    <p className="font-normal text-base text-dark opacity-50">
+                      {comment}
+                    </p>
+                  </li>
+                );
+              })}
             </ul>
           )}
-          <Button variant="filled" className="py-3.5 px-8">
+          <Button
+            variant="filled"
+            className="py-3.5 px-8"
+            onClick={() => handleOpenModal(item)}
+          >
             Make an appointment
           </Button>
         </div>

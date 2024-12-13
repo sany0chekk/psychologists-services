@@ -9,6 +9,15 @@ interface Props {
 }
 
 export default function Input({ name, type, placeholder, className }: Props) {
+  if (type === "textarea") {
+    <Field
+      as="textarea"
+      name={name}
+      type={type}
+      placeholder={placeholder}
+      className={`outline-none p-4 border border-1 border-[rgba(25, 26, 21, 0.1)] rounded-2xl w-full transition-all focus:border-dark focus:border-opacity-30 resize-none ${className}`}
+    />;
+  }
   return (
     <Field
       name={name}
