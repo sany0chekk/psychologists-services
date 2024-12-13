@@ -38,6 +38,7 @@ export default function Header() {
     setIsMenuOpen(true);
     document.body.style.overflow = "hidden";
   };
+
   const handleMenuClose = () => {
     setIsMenuOpen(false);
     document.body.style.overflow = "";

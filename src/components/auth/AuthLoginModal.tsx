@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Formik, FormikHelpers } from "formik";
+import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
 import Button from "../ui/Button";
@@ -69,17 +69,22 @@ export default function AuthLoginModal({ isOpen, closeModal }: Props) {
           onSubmit={handleSubmit}
         >
           <Form>
-            <Input
-              name="email"
-              type="email"
-              placeholder="Email"
-              className="mb-4"
-            />
-            <AuthPasswordInput
-              name="password"
-              placeholder="Password"
-              className="mb-10"
-            />
+            <div className="mb-4">
+              <Input name="email" type="email" placeholder="Email" />
+              <ErrorMessage
+                name="email"
+                component="span"
+                className="font-medium text-red-500 pl-2"
+              />
+            </div>
+            <div className="mb-10">
+              <AuthPasswordInput name="password" placeholder="Password" />
+              <ErrorMessage
+                name="password"
+                component="span"
+                className="font-medium text-red-500 pl-2"
+              />
+            </div>
             <Button
               type="submit"
               variant="filled"

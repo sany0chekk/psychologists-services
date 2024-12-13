@@ -19,7 +19,7 @@ export default function Button({
   onClick = () => {},
 }: Props) {
   const defaultStyles =
-    "flex items-center gap-4 font-medium text-base text-dark rounded-full";
+    "inline-flex items-center gap-4 font-medium text-base text-dark rounded-full";
   const variantStyles =
     variant === "filled"
       ? "text-light bg-green transition-colors hover:bg-darkGreen"

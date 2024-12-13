@@ -32,7 +32,7 @@ export default function MobileMenu({
         isOpen
           ? "visible opacity-100 translate-x-0 pointer-events-auto"
           : "invisible opacity-0 translate-x-10 pointer-events-none"
-      } laptop:hidden fixed top-0 left-0 w-full h-full z-50 bg-light flex flex-col gap-10 p-4 transition-all`}
+      } laptop:hidden fixed top-0 right-0 w-full md:w-1/2 h-full z-50 bg-light flex flex-col gap-10 p-4 transition-all overflow-y-auto shadow-md`}
       onClick={handleClose}
     >
       <button className="ml-auto top-5 right-5 transition-opacity hover:opacity-70">
@@ -40,7 +40,7 @@ export default function MobileMenu({
           <use href="./svg/icons.svg#icon-close"></use>
         </svg>
       </button>
-      <HeaderNav className="flex-grow flex items-center" />
+      <HeaderNav className="flex-grow flex items-center mb-auto" />
       {isAuthorized ? (
         <UserHeader />
       ) : (

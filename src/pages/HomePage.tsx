@@ -16,7 +16,12 @@ export default function HomePage() {
             guide in your own life with the help of our experienced
             psychologists.
           </p>
-          <Button variant="filled" className="py-4 px-12">
+          <Button
+            variant="filled"
+            type="link"
+            href="psychologists"
+            className="py-4 px-12"
+          >
             Get started
             <svg className="w-[15px] h-[17px] fill-light">
               <use href="./svg/icons.svg#icon-arrow"></use>

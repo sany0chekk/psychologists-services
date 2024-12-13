@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Formik, FormikHelpers } from "formik";
+import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
 import Button from "../ui/Button";
@@ -35,6 +35,7 @@ export default function AuthRegistrationModal({ isOpen, closeModal }: Props) {
   };
 
   const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -87,23 +88,30 @@ export default function AuthRegistrationModal({ isOpen, closeModal }: Props) {
           onSubmit={handleSubmit}
         >
           <Form>
-            <Input
-              name="name"
-              type="text"
-              placeholder="Name"
-              className="mb-4"
-            />
-            <Input
-              name="email"
-              type="email"
-              placeholder="Email"
-              className="mb-4"
-            />
-            <AuthPasswordInput
-              name="password"
-              placeholder="Password"
-              className="mb-10"
-            />
+            <div className="mb-4">
+              <Input name="name" type="text" placeholder="Name" />
+              <ErrorMessage
+                name="name"
+                component="span"
+                className="font-medium text-red-500 pl-2"
+              />
+            </div>
+            <div className="mb-4">
+              <Input name="email" type="email" placeholder="Email" />
+              <ErrorMessage
+                name="email"
+                component="span"
+                className="font-medium text-red-500 pl-2"
+              />
+            </div>
+            <div className="mb-10">
+              <AuthPasswordInput name="password" placeholder="Password" />
+              <ErrorMessage
+                name="password"
+                component="span"
+                className="font-medium text-red-500 pl-2"
+              />
+            </div>
             <Button
               type="submit"
               variant="filled"

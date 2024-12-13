@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Psychologist } from "../../types/psychologist";
 import Button from "../ui/Button";
+import { useSelector } from "react-redux";
+import { selectIsAuthorized } from "../../redux/user/selectors";
+import toast from "react-hot-toast";
 
 interface Props {
   item: Psychologist;
@@ -9,6 +12,8 @@ interface Props {
 
 export default function PsychologistsItem({ item, onOpenModal }: Props) {
   const [isFullVisible, setIsFullVisible] = useState(false);
+  const isAuthorized = useSelector(selectIsAuthorized);
+
   const {
     name,
     surname,
@@ -28,6 +33,13 @@ export default function PsychologistsItem({ item, onOpenModal }: Props) {
   };
 
   const handleToggleCard = () => setIsFullVisible(!isFullVisible);
+
+  const handleToggleFavorites = () => {
+    if (!isAuthorized) {
+      toast.error("You must be authorized to add items to favorites.");
+      return;
+    }
+  };
 
   return (
     <li className="relative p-6 flex flex-col md:flex-row gap-6 bg-light rounded-3xl">
@@ -61,7 +73,10 @@ export default function PsychologistsItem({ item, onOpenModal }: Props) {
                 Price / 1 hour: <span>{price_per_hour}</span>
               </p>
             </div>
-            <button className="max-md:absolute max-md:top-6 max-md:right-6">
+            <button
+              onClick={handleToggleFavorites}
+              className="max-md:absolute max-md:top-6 max-md:right-6"
+            >
               <svg className="w-6 h-6 fill-none stroke-dark transition-all hover:fill-green hover:stroke-green">
                 <use href="./svg/icons.svg#icon-heart"></use>
               </svg>

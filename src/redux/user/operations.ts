@@ -12,6 +12,7 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
+import toast from "react-hot-toast";
 
 export const checkAuthStatus = createAsyncThunk(
   "user/checkAuthStatus",
@@ -26,7 +27,12 @@ export const checkAuthStatus = createAsyncThunk(
         }
         unsubscribe();
       });
-    }).catch((error) => rejectWithValue(error.message));
+    }).catch((error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to check auth status";
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    });
   }
 );
 
@@ -46,8 +52,10 @@ export const googleSignIn = createAsyncThunk(
       }
       return rejectWithValue("User not found");
     } catch (error) {
-      console.error("Google sign-in error:", error);
-      return rejectWithValue("Google sign-in failed");
+      const errorMessage =
+        error instanceof Error ? error.message : "Google sign-in failed";
+      toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -79,11 +87,10 @@ export const register = createAsyncThunk(
         email: userCredential.user.email,
       };
     } catch (error) {
-      if (error instanceof Error) {
-        return thunkAPI.rejectWithValue(error.message);
-      } else {
-        return thunkAPI.rejectWithValue("An unknown error occurred");
-      }
+      const errorMessage =
+        error instanceof Error ? error.message : "Registration failed";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
     }
   }
 );
@@ -107,11 +114,10 @@ export const login = createAsyncThunk(
         email: userCredential.user.email,
       };
     } catch (error) {
-      if (error instanceof Error) {
-        return thunkAPI.rejectWithValue(error.message);
-      } else {
-        return thunkAPI.rejectWithValue("An unknown error occurred");
-      }
+      const errorMessage =
+        error instanceof Error ? error.message : "Login failed";
+      toast.error(errorMessage);
+      return thunkAPI.rejectWithValue(errorMessage);
     }
   }
 );
@@ -121,10 +127,9 @@ export const logout = createAsyncThunk("user/logout", async (_, thunkAPI) => {
     await signOut(auth);
     return null;
   } catch (error) {
-    if (error instanceof Error) {
-      return thunkAPI.rejectWithValue(error.message);
-    } else {
-      return thunkAPI.rejectWithValue("An unknown error occurred");
-    }
+    const errorMessage =
+      error instanceof Error ? error.message : "Logout failed";
+    toast.error(errorMessage);
+    return thunkAPI.rejectWithValue(errorMessage);
   }
 });

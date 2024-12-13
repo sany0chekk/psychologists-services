@@ -99,13 +99,20 @@ const slice = createSlice({
           state.error = "An error occurred";
         }
       })
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+        state.isRefreshing = true;
+      })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthorized = false;
         state.isRefreshing = false;
+        state.loading = false;
       })
       .addCase(logout.rejected, (state, action) => {
         state.isRefreshing = false;
+        state.loading = false;
+
         if (typeof action.payload === "string") {
           state.error = action.payload;
         } else {

@@ -7,7 +7,7 @@ interface Props {
 
 export default function FormTitle({ children, className = "" }: Props) {
   return (
-    <h2 className={`font-medium text-[40px] text-dark ${className}`}>
+    <h2 className={`font-medium text-[40px] text-dark leading-10 ${className}`}>
       {children}
     </h2>
   );
