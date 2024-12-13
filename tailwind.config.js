@@ -8,9 +8,11 @@ export default {
         lightGreen: "#54BE9633",
         darkGreen: "#36a379",
         light: "#FBFBFB",
+        bg: "#F3F3F3",
         dark: "#191A15",
         purple: "#4535af",
         yellow: "#fbc75e",
+        grey: "#8a8a89",
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
