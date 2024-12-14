@@ -8,8 +8,16 @@ import { checkAuth } from "../../firebase";
 import { setUser } from "../redux/user/slice";
 import PrivateRoute from "./routes/PrivateRoute";
 import PageLoader from "./loaders/PageLoader";
-import { selectIsLoading, selectIsRefreshing } from "../redux/user/selectors";
+import {
+  selectIsLoading,
+  selectIsRefreshing,
+  selectUser,
+} from "../redux/user/selectors";
 import { Toaster } from "react-hot-toast";
+import {
+  fetchFavorites,
+  fetchPsychologists,
+} from "../redux/psychologists/operations";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const PsychologistsPage = lazy(() => import("../pages/PsychologistsPage"));
@@ -19,8 +27,14 @@ export default function App() {
   const [authChecked, setAuthChecked] = useState(false);
   const isRefreshing = useSelector(selectIsRefreshing);
   const isLoading = useSelector(selectIsLoading);
+  const user = useSelector(selectUser);
 
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchPsychologists());
+    dispatch(fetchFavorites(user?.uid));
+  }, [dispatch, user?.uid]);
 
   useEffect(() => {
     checkAuth()

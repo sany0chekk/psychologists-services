@@ -3,10 +3,14 @@ import Container from "../components/layouts/Container";
 import PsychologistsList from "../components/psychologists/PsychologistsList";
 import PsychologistsModal from "../components/psychologists/PsychologistsModal";
 import { Psychologist } from "../types/psychologist";
+import { useSelector } from "react-redux";
+import { selectPsychologists } from "../redux/psychologists/selectors";
 
 export default function PsychologistsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [psychologist, setPsychologist] = useState<Psychologist | null>(null);
+
+  const psychologists = useSelector(selectPsychologists);
 
   const handleOpenModal = (psychologist: Psychologist) => {
     setIsModalOpen(true);
@@ -23,7 +27,10 @@ export default function PsychologistsPage() {
     <>
       <section className="pt-16 pb-[100px]">
         <Container>
-          <PsychologistsList onOpenModal={handleOpenModal} />
+          <PsychologistsList
+            items={psychologists}
+            onOpenModal={handleOpenModal}
+          />
         </Container>
       </section>
       <PsychologistsModal

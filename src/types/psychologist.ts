@@ -1,4 +1,5 @@
 export interface Psychologist {
+  id: string;
   name: string;
   surname: string;
   languages: string[];
