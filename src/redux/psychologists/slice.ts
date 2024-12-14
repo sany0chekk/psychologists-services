@@ -63,7 +63,6 @@ const slice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-
       .addCase(removeFromFavorites.pending, (state) => {
         state.loading = true;
         state.error = null;
