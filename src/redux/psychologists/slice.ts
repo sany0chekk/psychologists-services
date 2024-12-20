@@ -58,29 +58,23 @@ const slice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(addToFavorites.pending, (state) => {
-        state.loading = true;
         state.error = null;
       })
       .addCase(addToFavorites.fulfilled, (state, action) => {
-        state.loading = false;
         state.favorites.push(action.payload);
       })
       .addCase(addToFavorites.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload as string;
       })
       .addCase(removeFromFavorites.pending, (state) => {
-        state.loading = true;
         state.error = null;
       })
       .addCase(removeFromFavorites.fulfilled, (state, action) => {
-        state.loading = false;
         state.favorites = state.favorites.filter(
           (fav) => Number(fav.id) !== Number(action.payload)
         );
       })
       .addCase(removeFromFavorites.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload as string;
       });
   },

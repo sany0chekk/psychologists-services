@@ -5,6 +5,7 @@ import PsychologistsModal from "../components/psychologists/PsychologistsModal";
 import { Psychologist } from "../types/psychologist";
 import { useSelector } from "react-redux";
 import { selectPsychologists } from "../redux/psychologists/selectors";
+import Filters from "../components/psychologists/Filters";
 
 export default function PsychologistsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,6 +28,7 @@ export default function PsychologistsPage() {
     <>
       <section className="pt-16 pb-[100px]">
         <Container>
+          <Filters />
           <PsychologistsList
             isLoadMore={true}
             items={psychologists}

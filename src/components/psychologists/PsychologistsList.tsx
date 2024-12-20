@@ -10,6 +10,7 @@ import {
 } from "../../redux/psychologists/selectors";
 import { fetchPsychologists } from "../../redux/psychologists/operations";
 import Loader from "../loaders/Loader";
+import { AnimatePresence, motion } from "motion/react";
 
 interface Props {
   isLoadMore?: boolean;
@@ -26,7 +27,7 @@ export default function PsychologistsList({
   const lastKey = useSelector(selectLastKey);
   const isLoading = useSelector(selectLoading);
 
-  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
   const isFirstRender = useRef(true);
 
   const handleLoadMore = () => {
@@ -62,17 +63,31 @@ export default function PsychologistsList({
     <div className="flex flex-col">
       {items.length > 0 ? (
         <div>
-          <ul className="grid gap-8">
-            {items.map((item, index) => (
-              <div
-                key={item.id}
-                ref={(el) => (itemsRef.current[index] = el)}
-                id={`psychologist-${item.id}`}
-              >
-                <PsychologistsItem item={item} onOpenModal={onOpenModal} />
-              </div>
-            ))}
-          </ul>
+          <AnimatePresence mode="popLayout">
+            <ul className="grid gap-8">
+              {items.map((item, index) =>
+                isLoadMore ? (
+                  <li
+                    key={item.id}
+                    ref={(el) => (itemsRef.current[index] = el)}
+                    id={`psychologist-${item.id}`}
+                  >
+                    <PsychologistsItem item={item} onOpenModal={onOpenModal} />
+                  </li>
+                ) : (
+                  <motion.li
+                    key={item.id}
+                    layout
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ type: "spring" }}
+                  >
+                    <PsychologistsItem item={item} onOpenModal={onOpenModal} />
+                  </motion.li>
+                )
+              )}
+            </ul>
+          </AnimatePresence>
         </div>
       ) : (
         <p className="text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-3xl opacity-40">

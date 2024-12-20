@@ -32,7 +32,7 @@ export default function PsychologistsItem({ item, onOpenModal }: Props) {
   const handleToggleCard = () => setIsFullVisible(!isFullVisible);
 
   return (
-    <li className="relative p-6 flex flex-col md:flex-row gap-6 bg-light rounded-3xl">
+    <div className="relative p-6 flex flex-col md:flex-row gap-6 bg-light rounded-3xl">
       <div className="w-[120px] h-[120px] p-3 rounded-3xl border-2 border-green border-opacity-50 flex-shrink-0">
         <img
           src={avatar_url}
@@ -151,6 +151,6 @@ export default function PsychologistsItem({ item, onOpenModal }: Props) {
           {isFullVisible ? "Hide more" : "Read More"}
         </button>
       </div>
-    </li>
+    </div>
   );
 }
