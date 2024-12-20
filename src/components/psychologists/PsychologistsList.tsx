@@ -12,7 +12,7 @@ import { fetchPsychologists } from "../../redux/psychologists/operations";
 import Loader from "../loaders/Loader";
 
 interface Props {
-  isLoadMore: boolean;
+  isLoadMore?: boolean;
   items: Psychologist[];
   onOpenModal: (psychologist: Psychologist) => void;
 }
