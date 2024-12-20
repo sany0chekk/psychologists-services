@@ -12,6 +12,7 @@ interface State {
   favorites: Psychologist[];
   loading: boolean;
   error: string | null;
+  lastKey?: string | null;
 }
 
 const initialState: State = {
@@ -19,6 +20,7 @@ const initialState: State = {
   favorites: [],
   loading: false,
   error: null,
+  lastKey: null,
 };
 
 const slice = createSlice({
@@ -33,7 +35,11 @@ const slice = createSlice({
       })
       .addCase(fetchPsychologists.fulfilled, (state, action) => {
         state.loading = false;
-        state.psychologists = action.payload;
+        state.psychologists = [
+          ...state.psychologists,
+          ...action.payload.result,
+        ];
+        state.lastKey = action.payload.lastKey;
       })
       .addCase(fetchPsychologists.rejected, (state, action) => {
         state.loading = false;
@@ -70,7 +76,7 @@ const slice = createSlice({
       .addCase(removeFromFavorites.fulfilled, (state, action) => {
         state.loading = false;
         state.favorites = state.favorites.filter(
-          (fav) => fav.id !== action.payload
+          (fav) => Number(fav.id) !== Number(action.payload)
         );
       })
       .addCase(removeFromFavorites.rejected, (state, action) => {

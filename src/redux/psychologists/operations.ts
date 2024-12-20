@@ -1,24 +1,61 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getDatabase, ref, get, update, remove } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  get,
+  update,
+  remove,
+  query,
+  limitToFirst,
+  orderByKey,
+  startAfter,
+} from "firebase/database";
 import toast from "react-hot-toast";
 import { Psychologist } from "../../types/psychologist";
 
 export const fetchPsychologists = createAsyncThunk(
   "psychologists/fetchPsychologists",
-  async (_, { rejectWithValue }) => {
-    const db = getDatabase();
-    const psychologistsRef = ref(db, "psychologists");
+  async (lastKey: string | null = null, { rejectWithValue }) => {
     try {
-      const snapshot = await get(psychologistsRef);
-      if (snapshot.exists()) {
-        const psychologists = snapshot.val();
-        return Object.keys(psychologists).map((id) => ({
-          ...psychologists[id],
-          id,
-        })) as Psychologist[];
+      const db = getDatabase();
+      const psychologistsRef = ref(db, "psychologists");
+      let queryRef;
+
+      if (lastKey) {
+        queryRef = query(
+          psychologistsRef,
+          orderByKey(),
+          startAfter(lastKey), // Завантажуємо після останнього ключа
+          limitToFirst(3)
+        );
       } else {
-        return [];
+        queryRef = query(psychologistsRef, orderByKey(), limitToFirst(3));
       }
+
+      const snapshot = await get(queryRef);
+      const data = snapshot.val();
+
+      if (data) {
+        const result = (Object.entries(data) as [string, Psychologist][]).map(
+          ([key, item]) => ({
+            ...item,
+            id: key,
+          })
+        );
+
+        const lastKey = Object.keys(data).pop();
+        const totalItemsSnapshot = await get(psychologistsRef);
+        const totalItems = totalItemsSnapshot.val();
+        const totalCount = totalItems ? Object.keys(totalItems).length : 0;
+
+        if (Object.keys(data).length < 3 || Number(lastKey) + 1 >= totalCount) {
+          return { result, lastKey: null };
+        }
+
+        return { result, lastKey };
+      }
+
+      return { result: [], lastKey: null };
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -91,7 +128,7 @@ export const removeFromFavorites = createAsyncThunk(
     const userFavoritesRef = ref(db, `favorites/${userId}/${psychologistId}`);
     try {
       await remove(userFavoritesRef);
-      return psychologistId; // Повертаємо id для видалення
+      return psychologistId;
     } catch (error) {
       const errorMessage =
         error instanceof Error

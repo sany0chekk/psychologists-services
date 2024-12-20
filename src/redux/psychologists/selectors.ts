@@ -5,3 +5,7 @@ export const selectPsychologists = (state: RootState) =>
 
 export const selectFavorites = (state: RootState) =>
   state.psychologists.favorites;
+
+export const selectLastKey = (state: RootState) => state.psychologists.lastKey;
+
+export const selectLoading = (state: RootState) => state.psychologists.loading;

@@ -28,6 +28,7 @@ export default function PsychologistsPage() {
       <section className="pt-16 pb-[100px]">
         <Container>
           <PsychologistsList
+            isLoadMore={true}
             items={psychologists}
             onOpenModal={handleOpenModal}
           />
