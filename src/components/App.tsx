@@ -89,7 +89,7 @@ export default function App() {
               <Route
                 index
                 element={
-                  <PageWrapper>
+                  <PageWrapper className="flex justify-center flex-grow">
                     <HomePage />
                   </PageWrapper>
                 }

@@ -4,7 +4,7 @@ import Button from "../components/ui/Button";
 
 export default function HomePage() {
   return (
-    <section className="pt-10 pb-20 flex-grow flex">
+    <section className="pt-10 pb-20 flex">
       <Container className="flex flex-col laptop:flex-row items-center justify-between w-full">
         <div className="max-w-[595px] max-laptop:mb-20">
           <h1 className="font-semibold  text-5xl laptop:text-[80px] leading-[0.95] mb-5">
