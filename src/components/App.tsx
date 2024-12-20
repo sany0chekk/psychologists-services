@@ -19,7 +19,7 @@ import {
 } from "../redux/psychologists/operations";
 import { selectLastKey } from "../redux/psychologists/selectors";
 import PageWrapper from "./layouts/PageWrapper";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const PsychologistsPage = lazy(() => import("../pages/PsychologistsPage"));
