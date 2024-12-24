@@ -1,18 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {
-  addToFavorites,
-  fetchFavorites,
-  fetchPsychologists,
-  removeFromFavorites,
-} from "./operations";
-import { Psychologist } from "../../types/psychologist";
+import {createSlice} from "@reduxjs/toolkit";
+import {addToFavorites, fetchFavorites, fetchPsychologists, removeFromFavorites,} from "./operations";
+import {Psychologist} from "../../types/psychologist";
 
 interface State {
   psychologists: Psychologist[];
   favorites: Psychologist[];
   loading: boolean;
-  error: string | null;
+  error: string | null | unknown;
   lastKey?: string | null;
+  hasMore: boolean | null;
+  currentFilter: "A to Z" | "Z to A" | "Less than 10$" | "Greater than 10$" | "Popular" | "Not popular" | "Show all";
 }
 
 const initialState: State = {
@@ -21,30 +18,34 @@ const initialState: State = {
   loading: false,
   error: null,
   lastKey: null,
+  hasMore: null,
+  currentFilter: "Show all"
 };
 
 const slice = createSlice({
   name: "psychologists",
   initialState,
-  reducers: {},
+  reducers: {
+    setFilter: (state, action) => {
+      state.currentFilter = action.payload;
+      state.psychologists = [];
+    }
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPsychologists.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchPsychologists.fulfilled, (state, action) => {
-        state.loading = false;
-        state.psychologists = [
-          ...state.psychologists,
-          ...action.payload.result,
-        ];
-        state.lastKey = action.payload.lastKey;
-      })
-      .addCase(fetchPsychologists.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
+        .addCase(fetchPsychologists.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(fetchPsychologists.fulfilled, (state, action) => {
+          state.loading = false;
+          state.psychologists = [...state.psychologists, ...action.payload.psychologists];
+          state.hasMore = action.payload.hasMore;
+        })
+        .addCase(fetchPsychologists.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        })
       .addCase(fetchFavorites.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -80,4 +81,5 @@ const slice = createSlice({
   },
 });
 
+export const {setFilter} = slice.actions;
 export default slice.reducer;

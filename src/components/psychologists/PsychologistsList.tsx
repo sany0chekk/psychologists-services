@@ -1,16 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import PsychologistsItem from "./PsychologistsItem";
-import { Psychologist } from "../../types/psychologist";
+import {Psychologist} from "../../types/psychologist";
 import Button from "../ui/Button";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../redux/store";
-import {
-  selectLastKey,
-  selectLoading,
-} from "../../redux/psychologists/selectors";
-import { fetchPsychologists } from "../../redux/psychologists/operations";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch} from "../../redux/store";
+import {selectCurrentFilter, selectHasMore, selectLoading} from "../../redux/psychologists/selectors";
+import {fetchPsychologists} from "../../redux/psychologists/operations";
 import Loader from "../loaders/Loader";
-import { AnimatePresence, motion } from "motion/react";
+import {AnimatePresence, motion} from "motion/react";
 
 interface Props {
   isLoadMore?: boolean;
@@ -23,17 +20,21 @@ export default function PsychologistsList({
   onOpenModal,
   isLoadMore = false,
 }: Props) {
+  const [page, setPage] = useState(2);
+  const perPage = 3;
+
+
   const dispatch = useDispatch<AppDispatch>();
-  const lastKey = useSelector(selectLastKey);
   const isLoading = useSelector(selectLoading);
+  const hasMore = useSelector(selectHasMore);
+  const currentFilter = useSelector(selectCurrentFilter);
 
   const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
   const isFirstRender = useRef(true);
 
   const handleLoadMore = () => {
-    if (lastKey) {
-      dispatch(fetchPsychologists(lastKey));
-    }
+      setPage(page + 1);
+      dispatch(fetchPsychologists({page: page + 1, pageSize: perPage, filter: currentFilter}));
   };
 
   useEffect(() => {
@@ -99,15 +100,14 @@ export default function PsychologistsList({
           {isLoading ? (
             <Loader />
           ) : (
-            lastKey && (
+              hasMore &&
               <Button
-                variant="filled"
-                onClick={handleLoadMore}
-                className="py-4 px-10"
+                  variant="filled"
+                  onClick={handleLoadMore}
+                  className="py-4 px-10"
               >
                 Load more
               </Button>
-            )
           )}
         </div>
       )}

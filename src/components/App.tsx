@@ -1,51 +1,45 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import React, {lazy, Suspense, useEffect, useState} from "react";
+import {Route, Routes, useLocation} from "react-router-dom";
 import Layout from "./layouts/Layout";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../redux/store";
-import { checkAuth } from "../../firebase";
-import { setUser } from "../redux/user/slice";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch} from "../redux/store";
+import {checkAuth} from "../../firebase";
+import {setUser} from "../redux/user/slice";
 import PrivateRoute from "./routes/PrivateRoute";
 import PageLoader from "./loaders/PageLoader";
-import {
-  selectIsLoading,
-  selectIsRefreshing,
-  selectUser,
-} from "../redux/user/selectors";
-import { Toaster } from "react-hot-toast";
-import {
-  fetchFavorites,
-  fetchPsychologists,
-} from "../redux/psychologists/operations";
-import { selectLastKey } from "../redux/psychologists/selectors";
+import {selectIsLoading, selectIsRefreshing, selectUser,} from "../redux/user/selectors";
+import {Toaster} from "react-hot-toast";
+import {fetchFavorites, fetchPsychologists,} from "../redux/psychologists/operations";
+import {selectLastKey} from "../redux/psychologists/selectors";
 import PageWrapper from "./layouts/PageWrapper";
-import { AnimatePresence } from "motion/react";
+import {AnimatePresence} from "motion/react";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const PsychologistsPage = lazy(() => import("../pages/PsychologistsPage"));
 const FavoritesPage = lazy(() => import("../pages/FavoritesPage"));
 
 export default function App() {
-  const location = useLocation();
   const [authChecked, setAuthChecked] = useState(false);
+  const [isFetchingPsychologists, setIsFetchingPsychologists] = useState(false);
+
+  const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+
   const isRefreshing = useSelector(selectIsRefreshing);
   const isLoading = useSelector(selectIsLoading);
   const user = useSelector(selectUser);
   const lastKey = useSelector(selectLastKey);
 
-  const dispatch = useDispatch<AppDispatch>();
 
-  const [isFetchingPsychologists, setIsFetchingPsychologists] = useState(false);
-
-  const loadPsychologists = async (lastKey: string | null) => {
+  const loadPsychologists = async () => {
     setIsFetchingPsychologists(true);
-    await dispatch(fetchPsychologists(lastKey));
+    await dispatch(fetchPsychologists({ page: 1, pageSize: 3, filter: "Show all" }));
     setIsFetchingPsychologists(false);
   };
 
   useEffect(() => {
     if (lastKey !== undefined) {
-      loadPsychologists(lastKey);
+      loadPsychologists();
     }
   }, [dispatch]);
 

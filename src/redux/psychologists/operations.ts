@@ -1,70 +1,65 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  getDatabase,
-  ref,
-  get,
-  update,
-  remove,
-  query,
-  limitToFirst,
-  orderByKey,
-  startAfter,
-} from "firebase/database";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {get, getDatabase, ref, remove, update,} from "firebase/database";
 import toast from "react-hot-toast";
-import { Psychologist } from "../../types/psychologist";
+import {Psychologist} from "../../types/psychologist";
+
+
+interface FetchPsychologistsParams {
+  page: number;
+  pageSize: number;
+  filter: "A to Z" | "Z to A" | "Less than 10$" | "Greater than 10$" | "Popular" | "Not popular" | "Show all";
+}
 
 export const fetchPsychologists = createAsyncThunk(
-  "psychologists/fetchPsychologists",
-  async (lastKey: string | null = null, { rejectWithValue }) => {
-    try {
-      const db = getDatabase();
-      const psychologistsRef = ref(db, "psychologists");
-      let queryRef;
+    "psychologists/fetchPsychologists",
+    async ({ page, pageSize, filter }: FetchPsychologistsParams, { rejectWithValue }) => {
+      try {
+        const db = getDatabase();
+        const snapshot = await get(ref(db, "psychologists"));
 
-      if (lastKey) {
-        queryRef = query(
-          psychologistsRef,
-          orderByKey(),
-          startAfter(lastKey), // Завантажуємо після останнього ключа
-          limitToFirst(3)
-        );
-      } else {
-        queryRef = query(psychologistsRef, orderByKey(), limitToFirst(3));
-      }
-
-      const snapshot = await get(queryRef);
-      const data = snapshot.val();
-
-      if (data) {
-        const result = (Object.entries(data) as [string, Psychologist][]).map(
-          ([key, item]) => ({
-            ...item,
-            id: key,
-          })
-        );
-
-        const lastKey = Object.keys(data).pop();
-        const totalItemsSnapshot = await get(psychologistsRef);
-        const totalItems = totalItemsSnapshot.val();
-        const totalCount = totalItems ? Object.keys(totalItems).length : 0;
-
-        if (Object.keys(data).length < 3 || Number(lastKey) + 1 >= totalCount) {
-          return { result, lastKey: null };
+        if (!snapshot.exists()) {
+          return { psychologists: [], hasMore: false };
         }
 
-        return { result, lastKey };
-      }
+        let psychologists: Psychologist[] = Object.values(snapshot.val());
 
-      return { result: [], lastKey: null };
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Failed to fetch psychologists";
-      toast.error(errorMessage);
-      return rejectWithValue(errorMessage);
+        switch (filter) {
+          case "A to Z":
+            psychologists.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+          case "Z to A":
+            psychologists.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+          case "Less than 10$":
+            psychologists = psychologists.filter((psych) => psych.price_per_hour < 10);
+            break;
+          case "Greater than 10$":
+            psychologists = psychologists.filter((psych) => psych.price_per_hour > 10);
+            break;
+          case "Popular":
+            psychologists.sort((a, b) => b.lessons_done - a.lessons_done);
+            break;
+          case "Not popular":
+            psychologists.sort((a, b) => a.lessons_done - b.lessons_done);
+            break;
+          case "Show all":
+          default:
+            break;
+        }
+
+        const startIndex = (page - 1) * pageSize;
+        const paginatedPsychologists = psychologists.slice(startIndex, startIndex + pageSize);
+
+        const hasMore = startIndex + pageSize < psychologists.length;
+
+        return { psychologists: paginatedPsychologists, hasMore };
+      } catch (error) {
+        const errorMessage =
+            error instanceof Error ? error.message : "Failed to fetch psychologists";
+        toast.error(errorMessage);
+        return rejectWithValue(errorMessage);
+      }
     }
-  }
 );
 
 export const fetchFavorites = createAsyncThunk(
